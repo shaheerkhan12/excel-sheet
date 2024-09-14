@@ -1,0 +1,143 @@
+<div>
+  <label for="startMonth">Start Month:</label>
+  <select id="startMonth" #startMonthSelect (change)="updatePeriods(startMonthSelect.value, endMonthSelect.value)">
+    <option *ngFor="let month of monthsInYear" [value]="month">{{ month }}</option>
+  </select>
+
+  <label for="endMonth">End Month:</label>
+  <select id="endMonth" #endMonthSelect (change)="updatePeriods(startMonthSelect.value, endMonthSelect.value)">
+    <option *ngFor="let month of monthsInYear" [value]="month">{{ month }}</option>
+  </select>
+</div>
+
+<form>
+  <table>
+    <thead>
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black">selection</th>
+
+        <th class="px-1 py-2 border flex-auto	border-black">Start Period V End Period V </th>
+        @for (period of periods(); track $index) {
+        <th class="px-1 py-2 border flex-auto	border-black">
+          {{ period.month }} {{ period.year }}
+        </th>
+        }
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black text-left uppercase" colspan="100%">Income</th>
+      </tr>
+
+      @for(income of incomeCategories(); track income;let i = $index){
+      <tr>
+        <td colspan="100%" class="px-1 py-2 border flex-auto	border-black text-left" >
+          <input  class="font-medium	"  [(ngModel)]="income.parentName"
+            [ngModelOptions]="{ standalone: true }" placeholder="Parent Name">
+        </td>
+      </tr>
+      @for(category of income.categories; track category;let j = $index){
+      <tr class="">
+        <td class="px-1 py-2 border flex-auto	border-black pointer"  [ngClass]="{'background-color':incomeCategorydeleteArray.includes(j)}" >
+          <input class="cursor-pointer"  (click)="selection('income',j,i)" placeholder="delete row">
+        </td>
+        <td class="px-1 py-2 border flex-auto	border-black"><input  (click)="addIncomeCategory('New Income Category', createEmptyAmounts(),income.parentName)" [(ngModel)]="category.name"
+            [ngModelOptions]="{ standalone: true }" placeholder="Category Name" ></td>
+        @for (item of category.amounts; track item.amounts;let k = $index) {
+        <td class="px-1 py-2 border flex-auto	border-black">
+          <input [(ngModel)]="category.amounts[k]" [ngModelOptions]="{ standalone: true }" 
+            (ngModelChange)="onAmountChange('income', i,j, k, $event)"
+            #inputRef
+            (keydown.arrowDown)="focusNextRow(i, j, k, 'income')"
+            (keydown.arrowUp)="focusPreviousRow(i, j, k, 'income')"
+            (keydown.arrowLeft)="focusPreviousCol(i, j, k, 'income')"
+            (keydown.arrowRight)="focusNextCol(i, j, k, 'income')">
+        </td>
+        }
+      </tr>
+    }
+      }
+
+      <tr>
+        <td class="px-1 py-2 border flex-auto	border-black" colspan="100%">
+          <button (click)="addIncomeCategory('New income Category', createEmptyAmounts(),'')">
+            Add parent Income
+          </button>
+        </td>
+      </tr>
+
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black"></th>
+
+        <th class="px-1 py-2 border flex-auto	border-black">Total Income</th>
+        <td class="px-1 py-2 border flex-auto	border-black" *ngFor="let total of totalIncome()">{{ total }}</td>
+      </tr>
+    </tbody>
+
+    <tbody>
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black text-left uppercase" colspan="100%">Expenses</th>
+      </tr>
+      @for(expense of expenseCategories(); track expense;let i = $index){
+        <tr>
+          <td colspan="100%" class="px-1 py-2 border flex-auto	border-black text-left" >
+            <input class="font-medium	"  [(ngModel)]="expense.parentName"
+              [ngModelOptions]="{ standalone: true }" placeholder="Parent Name">
+          </td>
+        </tr>
+        @for(category of expense.categories; track category;let j = $index){
+        <tr class="">
+          <td class="px-1 py-2 border flex-auto	border-black"  [ngClass]="{'background-color':expenseCategorydeleteArray.includes(j)}" >
+            <input class="cursor-pointer"  (click)="selection('income',j,i)" placeholder="delete row">
+
+          </td>
+          <td class="px-1 py-2 border flex-auto	border-black"><input  (click)="addExpenseCategory('New expense Category', createEmptyAmounts(),expense.parentName)" [(ngModel)]="category.name"
+              [ngModelOptions]="{ standalone: true }" placeholder="Category Name"></td>
+          @for (item of category.amounts; track item.amounts;let k = $index) {
+          <td class="px-1 py-2 border flex-auto	border-black">
+            <input [(ngModel)]="category.amounts[k]" [ngModelOptions]="{ standalone: true }" type="number"
+              (ngModelChange)="onAmountChange('expense', i,j, k, $event)">
+          </td>
+          }
+        </tr>
+      }
+        }
+        <tr>
+          <td class="px-1 py-2 border flex-auto	border-black" colspan="100%">
+            <button (click)="addExpenseCategory('New expense Category', createEmptyAmounts(),'')">
+              Add parent expense
+            </button>
+          </td>
+        </tr>
+    
+
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black"></th>
+        <th class="px-1 py-2 border flex-auto	border-black">Total Expense</th>
+        <td class="px-1 py-2 border flex-auto	border-black" *ngFor="let total of totalExpenses()">{{ total }}</td>
+      </tr>
+
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black"></th>
+
+        <th  class="px-1 py-2 border flex-auto	border-black">Profit / Loss</th>
+        <td  class="px-1 py-2 border flex-auto	border-black" *ngFor="let profit of profitLoss()">{{ profit }}</td>
+      </tr>
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black"></th>
+
+        <th  class="px-1 py-2 border flex-auto	border-black">Opening Balance</th>
+        <td  class="px-1 py-2 border flex-auto	border-black" *ngFor="let opening of openingBalance()">{{ opening }}</td>
+      </tr>
+      <tr>
+        <th class="px-1 py-2 border flex-auto	border-black"></th>
+
+        <th  class="px-1 py-2 border flex-auto	border-black">Closing Balance</th>
+        <td  class="px-1 py-2 border flex-auto	border-black" *ngFor="let closing of closingBalance()">{{ closing }}</td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+{{incomeCategories() | json}}
+{{expenseCategories() | json}}
