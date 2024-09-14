@@ -1,4 +1,11 @@
 # BudgetBuilder
+I tried doing it with reactive forms first but it wasted so much of the time ,Now i have done it with signals and it is in shape
+
+first add the date range and then add the parent categories and child categories 
+with child categories there is a delete button passed as an input i could have put a button but it wouldve not looked right
+with tab you can move through the fields to the next field
+with arrow keys also its a little buggy cause its not applied on the naming fields but tabs works fine for all
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
 
