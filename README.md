@@ -6,7 +6,7 @@ with child categories there is a delete button passed as an input i could have p
 with tab you can move through the fields to the next field
 with arrow keys also its a little buggy cause its not applied on the naming fields but tabs works fine for all
 
-##versions
+#versions
 I used signals and A standalone component along with that , I used angular version 17.3v according to the document.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.0.5.
